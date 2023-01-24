@@ -56,4 +56,11 @@ public class Grid : MonoBehaviour
     {
         return new Vector3(transform.position.x + (x * cellSize), 0f, transform.position.z + (y * cellSize));
     }
+
+    public Vector2Int GetGridPosition(Vector3 worldPosition)
+    {
+        worldPosition -= transform.position;
+        Vector2Int positionOnGrid = new Vector2Int((int)(worldPosition.x / cellSize), (int)(worldPosition.z / cellSize));
+        return positionOnGrid;
+    }
 }
