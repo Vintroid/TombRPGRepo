@@ -11,7 +11,7 @@ public class Grid : MonoBehaviour
     [SerializeField] float cellSize = 1.0f;
     [SerializeField] LayerMask obstacleLayer;
 
-    private void Start()
+    private void Awake()
     {
         GenerateGrid();
      
@@ -20,6 +20,13 @@ public class Grid : MonoBehaviour
     private void GenerateGrid()
     {
         grid = new Node[length, width];
+
+        for(int y= 0; y < width; y++)
+        {
+            for(int x = 0; x < length; x++) {
+                grid[x, y] = new Node();
+            }
+        }
         CheckPassableTerrain();
     }
 
@@ -62,5 +69,37 @@ public class Grid : MonoBehaviour
         worldPosition -= transform.position;
         Vector2Int positionOnGrid = new Vector2Int((int)(worldPosition.x / cellSize), (int)(worldPosition.z / cellSize));
         return positionOnGrid;
+    }
+
+    public void PlaceObject(Vector2Int positionOnGrid, GridObject gridObject)
+    {
+        if (CheckBoundary(positionOnGrid) == true)
+        {
+            grid[positionOnGrid.x, positionOnGrid.y].gridObject = gridObject;
+        }
+        else
+        {
+            Debug.Log("You are trying to place an object outside the boundaries!");
+        }
+    }
+
+    public bool CheckBoundary(Vector2Int positionOnGrid)
+    {
+        if(positionOnGrid.x < 0 || positionOnGrid.x >= length) { return false; }
+        if(positionOnGrid.y < 0 || positionOnGrid.y >= width) { return false; }
+        return true;
+    }
+
+    public GridObject GetPlacedObject(Vector2Int gridPosition)
+    {
+        if(CheckBoundary(gridPosition) == true)
+        {
+            GridObject gridObject = grid[gridPosition.x, gridPosition.y].gridObject;
+            return gridObject;
+        }
+        else
+        {
+            return null;
+        }
     }
 }

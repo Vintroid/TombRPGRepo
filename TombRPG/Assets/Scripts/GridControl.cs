@@ -16,7 +16,15 @@ public class GridControl : MonoBehaviour
             if(Physics.Raycast(ray, out hit, float.MaxValue, terrainLayerMask)) 
             {
                 Vector2Int gridPosition = targetGrid.GetGridPosition(hit.point);
-                Debug.Log(gridPosition);
+                GridObject gridObject = targetGrid.GetPlacedObject(gridPosition);
+                if (gridObject == null)
+                {
+                    Debug.Log("x=" + gridPosition.x + "y=" + gridPosition.y + " is empty");
+                }
+                else
+                {
+                    Debug.Log("x=" + gridPosition.x + "y=" + gridPosition.y + " is " + gridObject.GetComponent<Character>().Name);
+                }
             }
         }
     }
